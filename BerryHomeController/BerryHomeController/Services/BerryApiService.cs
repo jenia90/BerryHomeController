@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BerryHomeController.Common.Services
 {
@@ -16,38 +20,98 @@ namespace BerryHomeController.Common.Services
             _endpoint = endpoint;
         }
 
-        public Task<List<T>> GetAsync()
+        public async Task<List<T>> GetAsync()
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response;
+            using (var client = CreateHttpClient())
+            {
+                response = await client.GetAsync(_endpoint);
+            }
+
+            await HandleResponse(response);
+
+            var content = await response.Content.ReadAsStringAsync();
+            return await Task.Run(() => JsonConvert.DeserializeObject<List<T>>(content));
         }
 
-        public Task<T> GetAsyncById(Guid id)
+        public async Task<T> GetAsyncById(Guid id)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response;
+            using (var client = CreateHttpClient())
+            {
+                response = await client.GetAsync(_endpoint + id);
+            }
+
+            await HandleResponse(response);
+
+            var content = await response.Content.ReadAsStringAsync();
+            return await Task.Run(() => JsonConvert.DeserializeObject<T>(content));
         }
 
-        public Task<T> PostAsync(T data)
+        public async Task<T> PostAsync(T data)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response;
+            var sData = await Task.Run(() => JsonConvert.SerializeObject(data));
+
+            using (var client = CreateHttpClient())
+            {
+                response = await client.PostAsync(_endpoint,
+                    new StringContent(sData, Encoding.UTF8, "application/json"));
+            }
+
+            await HandleResponse(response);
+
+            var content = await response.Content.ReadAsStringAsync();
+            return await Task.Run(() => JsonConvert.DeserializeObject<T>(content));
         }
 
-        public Task PutAsync(Guid id, T data)
+        public async Task PutAsync(Guid id, T data)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response;
+            var sData = await Task.Run(() => JsonConvert.SerializeObject(data));
+
+            using (var client = CreateHttpClient())
+            {
+                response = await client.PutAsync(_endpoint + id,
+                    new StringContent(sData, Encoding.UTF8, "application/json"));
+            }
+
+            await HandleResponse(response);
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response;
+            using (var client = CreateHttpClient())
+            {
+                response = await client.DeleteAsync(_endpoint + id);
+            }
+
+            await HandleResponse(response);
         }
 
         private HttpClient CreateHttpClient()
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(API_URL);
-            
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return client;
+        }
+
+        private async Task HandleResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new Exception(content);
+                }
+
+                throw new HttpRequestException(content);
+            }
         }
     }
 }
