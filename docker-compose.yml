@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  berryhomecontroller.api:
+    image: ${DOCKER_REGISTRY}/berryhomecontrollerapi
+    build:
+      context: .
+      dockerfile: BerryHomeController/BerryHomeController.Api/Dockerfile
