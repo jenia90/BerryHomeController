@@ -1,16 +1,17 @@
 ﻿using System;
+using BerryHomeController.Common.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace BerryHomeController
+namespace BerryHomeController.Common
 {
     public partial class App : Application
     {
         public App()
         {
             InitializeComponent();
-
+            
             MainPage = new MainPage();
         }
 

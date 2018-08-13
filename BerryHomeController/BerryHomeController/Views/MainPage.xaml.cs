@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace BerryHomeController.Views
+namespace BerryHomeController.Common.Views
 {
     public partial class MainPage : ContentPage
     {

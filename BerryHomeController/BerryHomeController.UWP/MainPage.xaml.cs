@@ -21,7 +21,7 @@ namespace BerryHomeController.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new BerryHomeController.App());
+            LoadApplication(new BerryHomeController.Common.App());
         }
     }
 }
