@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BerryHomeController.Common.Extensions;
 
 namespace BerryHomeController.Common.Services
 {
@@ -17,8 +18,8 @@ namespace BerryHomeController.Common.Services
             {
                 new Device() { DeviceName = "TestDevice1", DevicePin = 0, Id = new Guid(), Type = DeviceType.Input, State = false},
                 new Device() { DeviceName = "TestDevice2", DevicePin = 1, Id = new Guid(), Type = DeviceType.Output, State = false},
-                new Device() { DeviceName = "TestDevice3", DevicePin = 2, Id = new Guid(), Type = DeviceType.Output, State = false},
-                new Device() { DeviceName = "TestDevice4", DevicePin = 3, Id = new Guid(), Type = DeviceType.Input, State = false},
+                new Device() { DeviceName = "TestDevice3", DevicePin = 2, Id = new Guid(), Type = DeviceType.Output, State = true},
+                new Device() { DeviceName = "TestDevice4", DevicePin = 3, Id = new Guid(), Type = DeviceType.Input, State = true},
                 new Device() { DeviceName = "TestDevice5", DevicePin = 4, Id = new Guid(), Type = DeviceType.Input, State = false}
             };
         }
@@ -44,7 +45,7 @@ namespace BerryHomeController.Common.Services
         {
             var dbDevice = _devices.Find(d => d.Id == id);
             _devices.Remove(dbDevice);
-            Device.Map(dbDevice, data);
+            dbDevice.Map(data);
             _devices.Add(dbDevice);
         }
 

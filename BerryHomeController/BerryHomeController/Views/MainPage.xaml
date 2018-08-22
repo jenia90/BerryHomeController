@@ -3,13 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:BerryHomeController"
              x:Class="BerryHomeController.Common.Views.MainPage"
-             xmlns:VM="clr-namespace:BerryHomeController.Common.ViewModels">
+             xmlns:VM="clr-namespace:BerryHomeController.Common.ViewModels"
+             xmlns:converter="clr-namespace:BerryHomeController.Common.Converters"
+             xmlns:behaviors="clr-namespace:BerryHomeController.Common.Behaviors"
+             Title="Devices">
 
     <ContentPage.BindingContext>
         <VM:MainPageViewModel/>
     </ContentPage.BindingContext>
-    <StackLayout>
-        <!--TODO: Implement!-->
-    </StackLayout>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BoolToStringConverter x:Key="BoolToString" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding Devices}" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame BorderColor="LightGray" HasShadow="True" Margin="10,10,10,-10" CornerRadius="0">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image Grid.Column="0" Grid.Row="2" Grid.RowSpan="3"/>
+                                <Switch Grid.Row="6" Grid.Column="2" IsToggled="{Binding State}">
+                                    <Switch.Behaviors>
+                                        <behaviors:EventToCommandBehavior EventName="Toggled" Command="SwitchDeviceCommand" CommandParameter="Id"/>
+                                    </Switch.Behaviors>
+                                </Switch>
+                                <Label Grid.ColumnSpan="2"
+                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       HorizontalOptions="CenterAndExpand"
+                                       HorizontalTextAlignment="Center"
+                                       Text="{Binding DeviceName}"/>
+                                <StackLayout Grid.Column="1"
+                                             Grid.Row="3"
+                                             HorizontalOptions="StartAndExpand"
+                                             Orientation="Horizontal">
+                                    <Label Text="Status: "/>
+                                    <Label>
+                                        <Label.Style>
+                                            <Binding Path="State">
+                                                <Binding.Converter>
+                                                    <converter:BoolToObjectConverter x:TypeArguments="Style">
+                                                        <converter:BoolToObjectConverter.TrueObject>
+                                                            <Style TargetType="Label">
+                                                                <Setter Property="Text" Value="On"/>
+                                                                <Setter Property="TextColor" Value="Green"/>
+                                                            </Style>
+                                                        </converter:BoolToObjectConverter.TrueObject>
+                                                        <converter:BoolToObjectConverter.FalseObject>
+                                                            <Style TargetType="Label">
+                                                                <Setter Property="Text" Value="Off"/>
+                                                                <Setter Property="TextColor" Value="Red"/>
+                                                            </Style>
+                                                        </converter:BoolToObjectConverter.FalseObject>
+                                                    </converter:BoolToObjectConverter>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </Label.Style>
+                                    </Label>
+                                </StackLayout>
+                                <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                                    <Label Text="Active Since: "/>
+                                    <!--TODO: Add some way to bind to last job.-->
+                                    <Label Text=""/>
+                                </StackLayout>
+                                <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+                                    <Label Text="Next Job: "/>
+                                    <!--TODO: Add some way to bind to last job.-->
+                                    <Label Text=""/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
 
 </ContentPage>
