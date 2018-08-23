@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BerryHomeController.Common.Extensions;
 
@@ -16,17 +15,17 @@ namespace BerryHomeController.Common.Services
         {
             _devices = new List<Device>
             {
-                new Device() { DeviceName = "TestDevice1", DevicePin = 0, Id = new Guid(), Type = DeviceType.Input, State = false},
-                new Device() { DeviceName = "TestDevice2", DevicePin = 1, Id = new Guid(), Type = DeviceType.Output, State = false},
-                new Device() { DeviceName = "TestDevice3", DevicePin = 2, Id = new Guid(), Type = DeviceType.Output, State = true},
-                new Device() { DeviceName = "TestDevice4", DevicePin = 3, Id = new Guid(), Type = DeviceType.Input, State = true},
-                new Device() { DeviceName = "TestDevice5", DevicePin = 4, Id = new Guid(), Type = DeviceType.Input, State = false}
+                new Device() { DeviceName = "TestDevice1", DevicePin = 0, Id = Guid.NewGuid(), Type = DeviceType.Input, State = false},
+                new Device() { DeviceName = "TestDevice2", DevicePin = 1, Id = Guid.NewGuid(), Type = DeviceType.Output, State = false},
+                new Device() { DeviceName = "TestDevice3", DevicePin = 2, Id = Guid.NewGuid(), Type = DeviceType.Output, State = true},
+                new Device() { DeviceName = "TestDevice4", DevicePin = 3, Id = Guid.NewGuid(), Type = DeviceType.Input, State = true},
+                new Device() { DeviceName = "TestDevice5", DevicePin = 4, Id = Guid.NewGuid(), Type = DeviceType.Input, State = false}
             };
         }
 
         public async Task<List<Device>> GetAsync()
         {
-            return _devices;
+            return _devices.OrderBy(d => d.DeviceName).ToList();
         }
 
         public async Task<Device> GetAsyncById(Guid id)

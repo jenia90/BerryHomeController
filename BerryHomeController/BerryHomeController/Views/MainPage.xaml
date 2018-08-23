@@ -3,14 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:BerryHomeController"
              x:Class="BerryHomeController.Common.Views.MainPage"
-             xmlns:VM="clr-namespace:BerryHomeController.Common.ViewModels"
              xmlns:converter="clr-namespace:BerryHomeController.Common.Converters"
              xmlns:behaviors="clr-namespace:BerryHomeController.Common.Behaviors"
+             x:Name="MainPageClass"
              Title="Devices">
-
-    <ContentPage.BindingContext>
-        <VM:MainPageViewModel/>
-    </ContentPage.BindingContext>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -19,7 +15,13 @@
     </ContentPage.Resources>
     
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Devices}" SelectionMode="None">
+        <ListView ItemsSource="{Binding Devices}" SelectionMode="Single" SelectedItem="{Binding SelectedDevice}">
+            <ListView.Behaviors>
+                <behaviors:EventToCommandBehavior 
+                    EventName="ItemSelected" 
+                    Command="{Binding Path=BindingContext.ExpandDeviceCommand, Source={x:Reference Name=MainPageClass}}"/>
+            </ListView.Behaviors>
+            
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -44,7 +46,10 @@
                                 <Image Grid.Column="0" Grid.Row="2" Grid.RowSpan="3"/>
                                 <Switch Grid.Row="6" Grid.Column="2" IsToggled="{Binding State}">
                                     <Switch.Behaviors>
-                                        <behaviors:EventToCommandBehavior EventName="Toggled" Command="SwitchDeviceCommand" CommandParameter="Id"/>
+                                        <behaviors:EventToCommandBehavior 
+                                            EventName="Toggled"
+                                            Command="{Binding Path=BindingContext.SwitchDeviceCommand, Source={x:Reference Name=MainPageClass}}" 
+                                            CommandParameter="{Binding Id}"/>
                                     </Switch.Behaviors>
                                 </Switch>
                                 <Label Grid.ColumnSpan="2"

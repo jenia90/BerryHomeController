@@ -5,6 +5,10 @@ using Xamarin.Forms;
 
 namespace BerryHomeController.Common.Behaviors
 {
+    /// <summary>
+    /// Implementation of generic behavior base class.
+    /// Code taken from https://github.com/xamarin/xamarin-forms-samples
+    /// </summary>
     public class BehaviorBase<T> : Behavior<T> where T : BindableObject
     {
         public T AssociatedObject { get; private set; }

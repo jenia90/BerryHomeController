@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="0.1" package="com.jenia.berrycontroller" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="25" android:targetSdkVersion="27" />
-	<application android:label="BerryHomeController.Android"></application>
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="Berry Controller"></application>
 </manifest>

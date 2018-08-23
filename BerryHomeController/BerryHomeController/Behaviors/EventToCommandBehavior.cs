@@ -7,9 +7,15 @@ using Xamarin.Forms;
 
 namespace BerryHomeController.Common.Behaviors
 {
+    /// <summary>
+    /// Implementation of Event To Command behavior.
+    /// Code taken from https://github.com/xamarin/xamarin-forms-samples
+    /// </summary>
     public class EventToCommandBehavior : BehaviorBase<View>
     {
         Delegate eventHandler;
+
+        #region Bindable Properties
 
         public static readonly BindableProperty EventNameProperty = BindableProperty.Create("EventName", typeof(string), typeof(EventToCommandBehavior), null, propertyChanged: OnEventNameChanged);
         public static readonly BindableProperty CommandProperty = BindableProperty.Create("Command", typeof(ICommand), typeof(EventToCommandBehavior), null);
@@ -39,6 +45,9 @@ namespace BerryHomeController.Common.Behaviors
             get { return (IValueConverter)GetValue(InputConverterProperty); }
             set { SetValue(InputConverterProperty, value); }
         }
+
+        #endregion
+
 
         protected override void OnAttachedTo(View bindable)
         {
