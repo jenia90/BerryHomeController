@@ -13,9 +13,15 @@
             <converter:BoolToStringConverter x:Key="BoolToString" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Devices}" SelectionMode="Single" SelectedItem="{Binding SelectedDevice}">
+        <ListView ItemsSource="{Binding Devices}" 
+                  SelectionMode="Single" 
+                  IsPullToRefreshEnabled="True" 
+                  SelectedItem="{Binding SelectedDevice}"
+                  RefreshCommand="{Binding RefreshDevicesCommand}"
+                  IsRefreshing="{Binding IsRefreshing}">
+
             <ListView.Behaviors>
                 <behaviors:EventToCommandBehavior 
                     EventName="ItemSelected" 
@@ -25,8 +31,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Frame BorderColor="LightGray" HasShadow="True" Margin="10,10,10,-10" CornerRadius="0">
-                            <Grid Margin="5">
+                        <Frame BorderColor="LightGray" HasShadow="True" Margin="10" CornerRadius="0">
+                            <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="*"/>
@@ -43,7 +49,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Image Grid.Column="0" Grid.Row="2" Grid.RowSpan="3"/>
+                                <!--<Image Grid.Column="0" Grid.Row="2" Grid.RowSpan="3"/>-->
                                 <Switch Grid.Row="6" Grid.Column="2" IsToggled="{Binding State}">
                                     <Switch.Behaviors>
                                         <behaviors:EventToCommandBehavior 

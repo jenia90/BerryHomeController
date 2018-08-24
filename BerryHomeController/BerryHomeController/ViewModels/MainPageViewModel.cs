@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using BerryHomeController.Common.Services;
 using BerryHomeController.Common.Views;
@@ -10,7 +9,7 @@ using Device = BerryHomeController.Common.Models.Device;
 
 namespace BerryHomeController.Common.ViewModels
 {
-    public class MainPageViewModel : INotifyPropertyChanged
+    public class MainPageViewModel : ViewModelBase
     {
         private readonly IBerryApiService<Device> _berryApiService;
 
@@ -25,6 +24,7 @@ namespace BerryHomeController.Common.ViewModels
 
         private ObservableCollection<Device> _devices;
         private Device _selectedDevice;
+        private bool _isRefreshing;
 
         public ObservableCollection<Device> Devices
         {
@@ -46,6 +46,16 @@ namespace BerryHomeController.Common.ViewModels
             }
         }
 
+        public bool IsRefreshing
+        {
+            get => _isRefreshing;
+            set
+            {
+                _isRefreshing = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -60,35 +70,29 @@ namespace BerryHomeController.Common.ViewModels
 
         private async void ExpandDevice()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new NavigationPage(new ExpandedDevicePage(SelectedDevice, _berryApiService)));
+            await Application.Current.MainPage.Navigation.PushAsync(new NavigationPage(new ExpandedDevicePage(SelectedDevice)));
             SelectedDevice = null;
         }
 
         private async void RefreshDevices()
         {
-            Devices?.Clear();
+#if DEBUG
+            await Task.Delay(500);
+#endif
             Devices = new ObservableCollection<Device>(await _berryApiService.GetAsync());
+            IsRefreshing = false;
         }
 
         public async void SwitchDevice(Guid id)
         {
 #if !DEBUG
             var device = Devices.First(d => d.Id == id);
-            _berryApiService.PutAsync(id, device).Wait();
+            await _berryApiService.PutAsync(id, device);
 #endif
             RefreshDevices();
         }
 
 #endregion
 
-#region INPC
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-#endregion
     }
 }

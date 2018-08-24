@@ -8,25 +8,15 @@ using BerryHomeController.Common.Services;
 
 namespace BerryHomeController.Common.ViewModels
 {
-    public class ExpandedDeviceViewModel : INotifyPropertyChanged
+    public class ExpandedDeviceViewModel : ViewModelBase
     {
         private readonly Device _device;
-        private readonly IBerryApiService<Device> _deviceApiService;
 
-        public ExpandedDeviceViewModel(Device device, IBerryApiService<Device> deviceApiService)
+        public ExpandedDeviceViewModel(Device device)
         {
             _device = device;
-            _deviceApiService = deviceApiService;
         }
 
         public string Title => _device.DeviceName;
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
