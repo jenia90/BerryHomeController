@@ -14,6 +14,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddDeviceCommand}"/>
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <ListView ItemsSource="{Binding Devices}" 
                   SelectionMode="Single" 
@@ -99,7 +103,7 @@
                                 </StackLayout>
                                 <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
                                     <Label Text="Next Job: "/>
-                                    <!--TODO: Add some way to bind to last job.-->
+                                    <!--TODO: Add some way to bind to next job.-->
                                     <Label Text=""/>
                                 </StackLayout>
                             </Grid>

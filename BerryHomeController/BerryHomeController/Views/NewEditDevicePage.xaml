@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BerryHomeController.Common.Views.NewEditDevicePage">
+    <ContentPage.Content>
+        <TableView Intent="Data">
+            <TableSection>
+                <EntryCell Text="{Binding Path=DeviceName}" Label="Name"/>
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="10">
+                        <Label Text="Type: "/>
+                        <Picker HorizontalOptions="CenterAndExpand">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Input</x:String>
+                                    <x:String>Output</x:String>
+                                    <x:String>PWM</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </StackLayout>
+                </ViewCell>
+                <EntryCell Label="Pin:" Text="{Binding DevicePin}"/>
+            </TableSection>
+        </TableView>
+    </ContentPage.Content>
+</ContentPage>

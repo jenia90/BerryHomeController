@@ -21,20 +21,11 @@ namespace BerryHomeController.Common.ViewModels
         }
 
         #region Properties
-
-        private ObservableCollection<Device> _devices;
+        
         private Device _selectedDevice;
         private bool _isRefreshing;
 
-        public ObservableCollection<Device> Devices
-        {
-            get => _devices;
-            set
-            {
-                _devices = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<Device> Devices { get; set; }
 
         public Device SelectedDevice
         {
@@ -63,6 +54,7 @@ namespace BerryHomeController.Common.ViewModels
         public ICommand ExpandDeviceCommand => new Command(ExpandDevice);
         public ICommand RefreshDevicesCommand => new Command(RefreshDevices);
         public ICommand SwitchDeviceCommand => new Command<Guid>(SwitchDevice);
+        public ICommand AddDeviceCommand => new Command(AddDevice);
 
         #endregion
 
@@ -92,7 +84,19 @@ namespace BerryHomeController.Common.ViewModels
             RefreshDevices();
         }
 
-#endregion
+        public async void AddDevice()
+        {
+            var device = new Device();
+            var newDevicePage = new NewEditDevicePage() {BindingContext = device};
+            //var vm = new NewEditDeviceViewModel() {Title = "New Device"};
+            //var newDevicePage = new NewEditDevicePage() {BindingContext = vm};
+            await NavigateTo(newDevicePage);
+            device.Id = Guid.NewGuid();
+            await _berryApiService.PostAsync(device);
+            //TODO: Add some way of value return.
+        }
+
+        #endregion
 
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using BerryHomeController.Common.Services;
+﻿using BerryHomeController.Common.Services;
 using BerryHomeController.Common.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
