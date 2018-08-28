@@ -31,10 +31,16 @@
                     EventName="ItemSelected" 
                     Command="{Binding Path=BindingContext.ExpandDeviceCommand, Source={x:Reference Name=MainPageClass}}"/>
             </ListView.Behaviors>
-            
+
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Remove" 
+                                      Command="{Binding Path=BindingContext.RemoveDeviceCommand, Source={x:Reference Name=MainPageClass}}" 
+                                      CommandParameter="{Binding Id}"/>
+                        </ViewCell.ContextActions>
+
                         <Frame BorderColor="LightGray" HasShadow="True" Margin="10" CornerRadius="0">
                             <Grid>
                                 <Grid.RowDefinitions>

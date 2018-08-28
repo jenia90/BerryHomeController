@@ -8,7 +8,7 @@ using BerryHomeController.Common.Services;
 
 namespace BerryHomeController.Common.ViewModels
 {
-    public class ExpandedDeviceViewModel : ViewModelBase
+    internal class ExpandedDeviceViewModel : ViewModelBase
     {
         private readonly Device _device;
 

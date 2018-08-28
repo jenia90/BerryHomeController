@@ -1,15 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:BerryHomeController.Common.Converters;assembly=BerryHomeController.Common"
+             xmlns:viewModels="clr-namespace:BerryHomeController.Common.ViewModels;assembly=BerryHomeController.Common"
              x:Class="BerryHomeController.Common.Views.NewEditDevicePage">
+    <ContentPage.Resources>
+        <converters:DeviceTypeToStringConverter x:Key="TypeToStringConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <viewModels:NewEditDeviceViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Command="{Binding SaveDeviceCommand}"/>
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <TableView Intent="Data">
             <TableSection>
-                <EntryCell Text="{Binding Path=DeviceName}" Label="Name"/>
+                <EntryCell Text="{Binding Path=Device.DeviceName}" Label="Name"/>
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="10">
                         <Label Text="Type: "/>
-                        <Picker HorizontalOptions="CenterAndExpand">
+                        <Picker HorizontalOptions="CenterAndExpand" SelectedItem="{Binding Path=Device.Type, Converter={StaticResource TypeToStringConverter}}">
                             <Picker.ItemsSource>
                                 <x:Array Type="{x:Type x:String}">
                                     <x:String>Input</x:String>
@@ -20,7 +34,7 @@
                         </Picker>
                     </StackLayout>
                 </ViewCell>
-                <EntryCell Label="Pin:" Text="{Binding DevicePin}"/>
+                <EntryCell Label="Pin:" Text="{Binding Device.DevicePin}"/>
             </TableSection>
         </TableView>
     </ContentPage.Content>

@@ -5,8 +5,15 @@ using Xamarin.Forms;
 
 namespace BerryHomeController.Common.ViewModels
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    internal abstract class ViewModelBase : INotifyPropertyChanged
     {
+        public ViewModelBase()
+        {
+
+        }
+
+        public INavigation Navigation { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -16,12 +23,12 @@ namespace BerryHomeController.Common.ViewModels
 
         protected async Task NavigateTo(Page page)
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new NavigationPage(page));
+            await Navigation.PushAsync(new NavigationPage(page));
         }
 
         protected async Task NavigateBack()
         {
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await Navigation.PopAsync();
         }
     }
 }

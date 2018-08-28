@@ -7,17 +7,11 @@ namespace BerryHomeController.Common.Views
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
-        {
-            InitializeComponent();
-            BindingContext = new MainPageViewModel(new BerryApiDeviceServiceMock());
-        }
-
         public MainPage(IBerryApiService<Device> deviceApiService)
         {
             InitializeComponent();
 
-            BindingContext = new MainPageViewModel(deviceApiService);
+            BindingContext = new MainPageViewModel(deviceApiService) { Navigation = Navigation };
         }
     }
 }

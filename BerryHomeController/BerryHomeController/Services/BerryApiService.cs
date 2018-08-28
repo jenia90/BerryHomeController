@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace BerryHomeController.Common.Services
 {
-    public class BerryApiService<T> : IBerryApiService<T>
+    public abstract class BerryApiService<T> : IBerryApiService<T>
     {
         //TODO: Move this into settings.
         private static readonly string API_URL = "http://192.168.1.220:8000/";
