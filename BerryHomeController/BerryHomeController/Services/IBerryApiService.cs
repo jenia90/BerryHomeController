@@ -6,8 +6,8 @@ namespace BerryHomeController.Common.Services
 {
     public interface IBerryApiService<T>
     {
-        Task<List<T>> GetAsync();
-        Task<T> GetAsyncById(Guid id);
+        Task<ICollection<T>> GetAsync();
+        Task<T> GetByIdAsync(Guid id);
         Task<T> PostAsync(T data);
         Task PutAsync(Guid id, T data);
         Task DeleteAsync(Guid id);

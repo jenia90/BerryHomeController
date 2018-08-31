@@ -11,6 +11,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:BoolToStringConverter x:Key="BoolToString" />
+            <converter:NullToVisibilityConverter x:Key="VisibilityConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -102,16 +103,13 @@
                                         </Label.Style>
                                     </Label>
                                 </StackLayout>
-                                <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-                                    <Label Text="Active Since: "/>
+                                <Label Grid.Row="4" Grid.Column="1" 
+                                       Text="Active Since: " 
+                                       IsVisible="{Binding State}"/>
                                     <!--TODO: Add some way to bind to last job.-->
-                                    <Label Text=""/>
-                                </StackLayout>
-                                <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
-                                    <Label Text="Next Job: "/>
-                                    <!--TODO: Add some way to bind to next job.-->
-                                    <Label Text=""/>
-                                </StackLayout>
+                                <Label Grid.Row="5" Grid.Column="1" 
+                                       Text="{Binding Path=Jobs[0].Start, StringFormat='Next Job: {0:DD/MM}'}" 
+                                       IsVisible="{Binding Jobs, Converter={StaticResource VisibilityConverter}}"/>
                             </Grid>
                         </Frame>
                     </ViewCell>

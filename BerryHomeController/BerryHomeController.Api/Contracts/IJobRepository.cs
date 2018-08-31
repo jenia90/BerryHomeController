@@ -10,6 +10,7 @@ namespace BerryHomeController.Api.Contracts
     {
         IEnumerable<Job> GetAllJobs();
         Job GetJobById(Guid jobId);
+        IEnumerable<Job> GetJobsByDeviceId(Guid id);
         void CreateJob(Job job);
         void UpdateJob(Job dbJob, Job job);
         void DeleteJob(Job job);

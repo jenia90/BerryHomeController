@@ -13,19 +13,19 @@ namespace BerryHomeController.Common.Services
     {
         //TODO: Move this into settings.
         private static readonly string API_URL = "http://192.168.1.220:8000/";
-        private readonly string _endpoint;
+        protected readonly string Endpoint;
 
         public BerryApiService(string endpoint)
         {
-            _endpoint = endpoint;
+            Endpoint = endpoint;
         }
 
-        public async Task<List<T>> GetAsync()
+        public async Task<ICollection<T>> GetAsync()
         {
             HttpResponseMessage response;
             using (var client = CreateHttpClient())
             {
-                response = await client.GetAsync(_endpoint);
+                response = await client.GetAsync(Endpoint);
             }
 
             await HandleResponse(response);
@@ -34,12 +34,12 @@ namespace BerryHomeController.Common.Services
             return await Task.Run(() => JsonConvert.DeserializeObject<List<T>>(content));
         }
 
-        public async Task<T> GetAsyncById(Guid id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             HttpResponseMessage response;
             using (var client = CreateHttpClient())
             {
-                response = await client.GetAsync(_endpoint + id);
+                response = await client.GetAsync(Endpoint + id);
             }
 
             await HandleResponse(response);
@@ -55,7 +55,7 @@ namespace BerryHomeController.Common.Services
 
             using (var client = CreateHttpClient())
             {
-                response = await client.PostAsync(_endpoint,
+                response = await client.PostAsync(Endpoint,
                     new StringContent(sData, Encoding.UTF8, "application/json"));
             }
 
@@ -72,7 +72,7 @@ namespace BerryHomeController.Common.Services
 
             using (var client = CreateHttpClient())
             {
-                response = await client.PutAsync(_endpoint + id,
+                response = await client.PutAsync(Endpoint + id,
                     new StringContent(sData, Encoding.UTF8, "application/json"));
             }
 
@@ -84,13 +84,13 @@ namespace BerryHomeController.Common.Services
             HttpResponseMessage response;
             using (var client = CreateHttpClient())
             {
-                response = await client.DeleteAsync(_endpoint + id);
+                response = await client.DeleteAsync(Endpoint + id);
             }
 
             await HandleResponse(response);
         }
 
-        private HttpClient CreateHttpClient()
+        protected HttpClient CreateHttpClient()
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(API_URL);
@@ -99,7 +99,7 @@ namespace BerryHomeController.Common.Services
             return client;
         }
 
-        private async Task HandleResponse(HttpResponseMessage response)
+        protected async Task HandleResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {

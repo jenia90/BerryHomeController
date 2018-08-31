@@ -25,6 +25,11 @@ namespace BerryHomeController.Api.Repository
                 .FirstOrDefault();
         }
 
+        public IEnumerable<Job> GetJobsByDeviceId(Guid id)
+        {
+            return FindAll().Where(j => j.DeviceId.Equals(id));
+        }
+
         public void CreateJob(Job job)
         {
             if(job.Id == Guid.Empty) job.Id = Guid.NewGuid();

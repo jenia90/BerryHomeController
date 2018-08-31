@@ -58,6 +58,23 @@ namespace BerryHomeController.Api.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+        
+        [HttpGet("device/{id}")]
+        public IActionResult GetJobsByDeviceId(Guid id)
+        {
+            try
+            {
+                var jobs = _repoWrapper.Job.GetJobsByDeviceId(id);
+
+                _logger.LogInfo($"Return all jobs with device Id: {id}");
+                return Ok(jobs);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Something went wrong in GetJobsByDeviceId action: {e.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
 
         [HttpPost]
         public IActionResult CreateJob([FromBody] Job job)
