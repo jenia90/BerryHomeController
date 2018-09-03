@@ -1,26 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:BerryHomeController.Common.Converters;assembly=BerryHomeController.Common"
+             xmlns:converters="clr-namespace:BerryHomeController.Common.Converters"
+             xmlns:viewModels="clr-namespace:BerryHomeController.Common.ViewModels"
              x:Class="BerryHomeController.Common.Views.ExpandedDevicePage"
+            x:Name="ExpandedDeviceClass"
             Title="{Binding Title}" >
 
     <!--Pages can be added as references or inline-->
     <ContentPage Title="Details">
         <ContentPage.BindingContext>
-            <Binding Source="{Binding Device}"/>
+            <Binding Source="{Binding Source={x:Reference Name=ExpandedDeviceClass}, Path=BindingContext.Device}"/>
         </ContentPage.BindingContext>
 
         <ContentPage.Resources>
             <converters:DeviceTypeToStringConverter x:Key="DeviceTypeToStringConverter"/>
+            <converters:IntToStringConverter x:Key="IntToStringConverter"/>
+            <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
         </ContentPage.Resources>
 
         <ContentPage.Content>
             <TableView Root="{Binding DeviceName}">
                 <TableSection>
-                    <TextCell Text="Id: " Detail="{Binding DeviceId}"/>
-                    <TextCell Text="Type: " Detail="{Binding Type}"/>
-                    <TextCell Text="Pin: " Detail="{Binding DevicePin}"/>
+                    <TextCell Text="Id: " Detail="{Binding DeviceId, Converter={StaticResource IntToStringConverter}}"/>
+                    <TextCell Text="Type: " Detail="{Binding Type, Converter={StaticResource DeviceTypeToStringConverter}}"/>
+                    <TextCell Text="Pin: " Detail="{Binding DevicePin, Converter={StaticResource IntToStringConverter}}"/>
                     <SwitchCell Text="State: " On="{Binding State}"/>
                 </TableSection>
             </TableView>
