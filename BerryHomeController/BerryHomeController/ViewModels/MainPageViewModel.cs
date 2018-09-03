@@ -18,20 +18,15 @@ namespace BerryHomeController.Common.ViewModels
         /// Initialize a new instance of MainPageViewModel with a given ApiService
         /// </summary>
         /// <param name="berryApiService">DeviceApiService that would be used for different CRUD operations.</param>
-        public MainPageViewModel(IBerryApiService<Device> berryApiService)
+        public MainPageViewModel()
         {
-            _berryApiService = berryApiService;
-            _berryStateApiService = new BerryApiStateService();
-
             RefreshDevices();
         }
 
         #endregion
 
         #region Properties
-
-        private readonly IBerryApiService<Device> _berryApiService;
-        private readonly IBerryApiService<State> _berryStateApiService;
+        
         private Device _selectedDevice;
         private bool _isRefreshing;
         private ObservableCollection<Device> _devices;
@@ -76,7 +71,7 @@ namespace BerryHomeController.Common.ViewModels
         public ICommand AddDeviceCommand => new Command(AddDevice);
         public ICommand RemoveDeviceCommand => new Command<Guid>(async id =>
         {
-            await _berryApiService.DeleteAsync(id);
+            await DeviceService.DeleteAsync(id);
             RefreshDevices();
         });
 
@@ -89,7 +84,8 @@ namespace BerryHomeController.Common.ViewModels
         /// </summary>
         private async void ExpandDevice()
         {
-            await NavigateTo(new ExpandedDevicePage(SelectedDevice));
+            var expandViewModel = new ExpandedDeviceViewModel(SelectedDevice);
+            await NavigateTo(new ExpandedDevicePage { BindingContext = expandViewModel});
             SelectedDevice = null;
         }
 
@@ -101,7 +97,7 @@ namespace BerryHomeController.Common.ViewModels
 #if DEBUG
             await Task.Delay(500);
 #endif
-            Devices = new ObservableCollection<Device>(await _berryApiService.GetAsync());
+            Devices = new ObservableCollection<Device>(await DeviceService.GetAsync());
             IsRefreshing = false;
         }
 
@@ -113,7 +109,7 @@ namespace BerryHomeController.Common.ViewModels
         {
 #if !DEBUG
             var device = Devices.First(d => d.Id == id);
-            await _berryStateApiService.PostAsync(new State() { DeviceId = id, DeviceState = device.State });
+            await DeviceService.PostAsync(new State() { DeviceId = id, DeviceState = device.State });
 #endif
             RefreshDevices();
         }
@@ -124,21 +120,20 @@ namespace BerryHomeController.Common.ViewModels
         public async void AddDevice()
         {
             // Initialize NewDevicePage.
-            var newDevicePage = new NewEditDevicePage()
+            var newDevicePage = new NewEditDevicePage
             {
-                BindingContext = new NewEditDeviceViewModel() { Title = "New Device", Navigation = Navigation }
+                BindingContext = new NewEditDeviceViewModel("New Device")
             };
 
             //Subscribe to device saved message.
             MessagingCenter.Subscribe<NewEditDeviceViewModel, Device>(this, "add_device", async (s, d) =>
             {
                 d.Id = Guid.NewGuid();
-                await _berryApiService.PostAsync(d);
+                await DeviceService.PostAsync(d);
                 RefreshDevices();
             });
             
             await NavigateTo(newDevicePage);
-            //TODO: Add some way of value return.
         }
 
         #endregion

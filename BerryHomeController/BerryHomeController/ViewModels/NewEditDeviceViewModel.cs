@@ -11,8 +11,13 @@ namespace BerryHomeController.Common.ViewModels
     internal class NewEditDeviceViewModel : ViewModelBase
     {
         private Device _device;
-        public NewEditDeviceViewModel()
+        public NewEditDeviceViewModel() : this("New Device")
+        {   
+        }
+
+        public NewEditDeviceViewModel(string title)
         {
+            _title = title;
             _device = new Device() { Type = DeviceType.Output };
         }
 

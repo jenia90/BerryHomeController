@@ -18,5 +18,6 @@ namespace BerryHomeController.Common.ViewModels
         }
 
         public string Title => _device.DeviceName;
+        public Device Device => _device;
     }
 }

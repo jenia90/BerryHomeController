@@ -8,10 +8,9 @@ namespace BerryHomeController.Common.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ExpandedDevicePage : TabbedPage
     {
-        public ExpandedDevicePage (Device device)
+        public ExpandedDevicePage ()
         {
             InitializeComponent();
-            BindingContext = new ExpandedDeviceViewModel(device);
         }
     }
 }

@@ -1,10 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:BerryHomeController.Common.Converters;assembly=BerryHomeController.Common"
              x:Class="BerryHomeController.Common.Views.ExpandedDevicePage"
             Title="{Binding Title}" >
 
     <!--Pages can be added as references or inline-->
-    <ContentPage Title="Details" />
-    <ContentPage Title="Jobs" />
+    <ContentPage Title="Details">
+        <ContentPage.BindingContext>
+            <Binding Source="{Binding Device}"/>
+        </ContentPage.BindingContext>
+
+        <ContentPage.Resources>
+            <converters:DeviceTypeToStringConverter x:Key="DeviceTypeToStringConverter"/>
+        </ContentPage.Resources>
+
+        <ContentPage.Content>
+            <TableView Root="{Binding DeviceName}">
+                <TableSection>
+                    <TextCell Text="Id: " Detail="{Binding DeviceId}"/>
+                    <TextCell Text="Type: " Detail="{Binding Type}"/>
+                    <TextCell Text="Pin: " Detail="{Binding DevicePin}"/>
+                    <SwitchCell Text="State: " On="{Binding State}"/>
+                </TableSection>
+            </TableView>
+        </ContentPage.Content>
+    </ContentPage>
+    <ContentPage Title="Jobs">
+
+    </ContentPage>
 </TabbedPage>

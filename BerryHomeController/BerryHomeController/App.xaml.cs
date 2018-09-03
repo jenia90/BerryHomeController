@@ -1,7 +1,11 @@
-﻿using BerryHomeController.Common.Services;
+﻿using BerryHomeController.Common.Models;
+using BerryHomeController.Common.Services;
+using BerryHomeController.Common.ViewModels;
 using BerryHomeController.Common.Views;
+using Unity;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Device = BerryHomeController.Common.Models.Device;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace BerryHomeController.Common
@@ -12,8 +16,10 @@ namespace BerryHomeController.Common
         {
             InitializeComponent();
 
-            //MainPage = new NavigationPage(new MainPage());
-            MainPage = new NavigationPage(new MainPage(new BerryApiDeviceServiceMock()));
+            var vm = InitializeContainers().Resolve<MainPageViewModel>();
+
+            MainPage = new NavigationPage(new MainPage (){BindingContext = vm});
+            //MainPage = new NavigationPage(new MainPage(new BerryApiDeviceServiceMock()));
         }
 
         protected override void OnStart()
@@ -29,6 +35,17 @@ namespace BerryHomeController.Common
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+
+        private UnityContainer InitializeContainers()
+        {
+            var container = new UnityContainer();
+
+            container.RegisterType<IBerryApiService<Device>, BerryApiDeviceServiceMock>();
+            container.RegisterType<IBerryApiService<Job>, BerryApiJobServiceMock>();
+            container.RegisterType<IBerryApiService<State>, BerryApiStateService>();
+
+            return container;
         }
     }
 }
